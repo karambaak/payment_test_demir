@@ -34,13 +34,6 @@ public class User implements UserDetails {
     @JoinColumn(name = "authority_id")
     private Authority authority;
 
-    @Column(name = "failed_login_attempts")
-    private int failedLoginAttempts;
-
-    @Column(name = "login_disabled")
-    private boolean loginDisabled;
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(authority.getAuthorityName()));
