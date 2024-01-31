@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: create table authorities
+      author: Alexandr
+      changes:
+        - createTable:
+            tableName: authorities
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: authority
+                  type: varchar(45)
+                  constraints:
+                    nullable: false

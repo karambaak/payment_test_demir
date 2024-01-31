@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create table tokens
+      author: Alexandr
+      changes:
+        - createTable:
+            tableName: tokens
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: token
+                  type: varchar
+              - column:
+                  name: user_login
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_login
+                    references: users(login)
