@@ -25,4 +25,10 @@ public class AuthenticationController {
     public ResponseEntity<JwtAuthenticationResponse> registry(@RequestBody UserDto userDto) throws InvalidLoginException {
         return ResponseEntity.ok(authenticationServiceImpl.registry(userDto));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request){
+        authenticationServiceImpl.logout(request);
+        return ResponseEntity.ok("Completely logout");
+    }
 }

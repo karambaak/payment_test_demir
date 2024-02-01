@@ -21,12 +21,17 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public boolean isTokenExist(User user) {
-        return tokensRepository.existsByUser_Login(user.getLogin());
+    public boolean isTokenExistByUser(String login) {
+        return tokensRepository.existsByUser_Login(login);
     }
 
     @Override
     public String getTokenByUserLogin(String login) {
-        return tokensRepository.findByUser_Login(login);
+        return tokensRepository.findByUser_Login(login).getToken();
+    }
+
+    @Override
+    public void deleteTokenByUserLogin(String login) {
+        tokensRepository.deleteByUser_Login(login);
     }
 }

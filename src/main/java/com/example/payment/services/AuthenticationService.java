@@ -10,4 +10,6 @@ public interface AuthenticationService {
     JwtAuthenticationResponse login(UserDto userDto, HttpServletRequest request);
 
     JwtAuthenticationResponse registry(UserDto userDto) throws InvalidLoginException;
+
+    void logout(HttpServletRequest request);
 }

@@ -1,7 +1,7 @@
 package com.example.payment.services.impl;
 
-import com.example.payment.dtos.UserDto;
 import com.example.payment.dtos.JwtAuthenticationResponse;
+import com.example.payment.dtos.UserDto;
 import com.example.payment.entities.User;
 import com.example.payment.errors.InvalidLoginException;
 import com.example.payment.repositories.AuthorityRepository;
@@ -35,18 +35,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(userDto.getLogin(), userDto.getPassword()));
         User user = userRepository.findById(userDto.getLogin())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid login or password"));
-        if (tokenService.isTokenExist(user)){
+        if (tokenService.isTokenExistByUser(user.getLogin())) {
             String existToken = tokenService.getTokenByUserLogin(user.getLogin());
-            return JwtAuthenticationResponse.builder()
-                    .token(existToken)
-                    .build();
-        } else {
-            String newToken = jwtService.generateToken(user);
-            tokenService.addUserToken(user, newToken);
-            return JwtAuthenticationResponse.builder()
-                    .token(newToken)
-                    .build();
+            if (!jwtService.isTokenExpired(existToken)) {
+                return JwtAuthenticationResponse.builder()
+                        .token(existToken)
+                        .build();
+            }
         }
+        String newToken = jwtService.generateToken(user);
+        tokenService.addUserToken(user, newToken);
+        return JwtAuthenticationResponse.builder()
+                .token(newToken)
+                .build();
+
     }
 
     @Override
@@ -68,5 +70,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return JwtAuthenticationResponse.builder()
                 .token(token)
                 .build();
+    }
+
+    @Override
+    public void logout(HttpServletRequest request) {
+        String login = request.getUserPrincipal().getName();
+        tokenService.deleteTokenByUserLogin(login);
     }
 }

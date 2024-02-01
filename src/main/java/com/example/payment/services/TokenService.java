@@ -6,7 +6,9 @@ public interface TokenService {
 
     void addUserToken(User user, String token);
 
-    boolean isTokenExist(User user);
+    public boolean isTokenExistByUser(String login);
 
     String getTokenByUserLogin(String login);
+
+    void deleteTokenByUserLogin(String login);
 }

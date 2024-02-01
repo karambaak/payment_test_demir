@@ -1,5 +1,6 @@
 package com.example.payment.configs;
 
+import com.example.payment.services.TokenService;
 import com.example.payment.services.impl.UserServiceDetailsImpl;
 import com.example.payment.services.JwtService;
 import jakarta.servlet.FilterChain;
@@ -24,6 +25,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserServiceDetailsImpl auth;
+    private final TokenService tokenService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
@@ -37,7 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         jwt = authHeader.substring(7);
         userName = jwtService.extractUserName(jwt);
-        if (StringUtils.isEmpty(userName) && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (!tokenService.isTokenExistByUser(userName)){
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (!StringUtils.isEmpty(userName) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = auth.userDetailsService().loadUserByUsername(userName);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
