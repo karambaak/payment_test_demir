@@ -1,0 +1,28 @@
+package com.example.payment.controlers;
+
+import com.example.payment.dtos.JwtAuthenticationResponse;
+import com.example.payment.dtos.UserDto;
+import com.example.payment.errors.InvalidLoginException;
+import com.example.payment.services.impl.AuthenticationServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
+public class AuthenticationController {
+
+    private final AuthenticationServiceImpl authenticationServiceImpl;
+    @PostMapping("/login")
+    public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody UserDto userDto, @NonNull HttpServletRequest request){
+        return ResponseEntity.ok(authenticationServiceImpl.login(userDto, request));
+    }
+
+    @PostMapping("/registry")
+    public ResponseEntity<JwtAuthenticationResponse> registry(@RequestBody UserDto userDto) throws InvalidLoginException {
+        return ResponseEntity.ok(authenticationServiceImpl.registry(userDto));
+    }
+}

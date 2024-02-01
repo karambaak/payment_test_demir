@@ -30,6 +30,7 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
+
     @ManyToOne
     @JoinColumn(name = "authority_id")
     private Authority authority;
