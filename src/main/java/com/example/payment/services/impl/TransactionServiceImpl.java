@@ -2,14 +2,13 @@ package com.example.payment.services.impl;
 
 import com.example.payment.entities.Transaction;
 import com.example.payment.entities.User;
-import com.example.payment.errors.NotEnoughBalanceException;
+import com.example.payment.errors.exceptions.NotEnoughBalanceException;
 import com.example.payment.repositories.TransactionsRepository;
 import com.example.payment.repositories.UserRepository;
 import com.example.payment.services.JwtService;
 import com.example.payment.services.TransactionsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 

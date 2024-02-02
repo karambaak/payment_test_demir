@@ -2,7 +2,8 @@ package com.example.payment.controlers;
 
 import com.example.payment.dtos.JwtAuthenticationResponse;
 import com.example.payment.dtos.UserDto;
-import com.example.payment.errors.InvalidLoginException;
+import com.example.payment.errors.exceptions.InvalidLoginException;
+import com.example.payment.errors.exceptions.LoginDisabledException;
 import com.example.payment.services.impl.AuthenticationServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
@@ -17,7 +18,9 @@ public class AuthenticationController {
 
     private final AuthenticationServiceImpl authenticationServiceImpl;
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody UserDto userDto, @NonNull HttpServletRequest request){
+    public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody UserDto userDto, @NonNull HttpServletRequest request)
+            throws LoginDisabledException
+    {
         return ResponseEntity.ok(authenticationServiceImpl.login(userDto, request));
     }
 

@@ -3,7 +3,8 @@ package com.example.payment.services.impl;
 import com.example.payment.dtos.JwtAuthenticationResponse;
 import com.example.payment.dtos.UserDto;
 import com.example.payment.entities.User;
-import com.example.payment.errors.InvalidLoginException;
+import com.example.payment.errors.exceptions.InvalidLoginException;
+import com.example.payment.errors.exceptions.LoginDisabledException;
 import com.example.payment.repositories.AuthorityRepository;
 import com.example.payment.repositories.UserRepository;
 import com.example.payment.services.AuthenticationService;
@@ -30,11 +31,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final TokenService tokenService;
 
     @Override
-    public JwtAuthenticationResponse login(UserDto userDto, HttpServletRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userDto.getLogin(), userDto.getPassword()));
+    public JwtAuthenticationResponse login(UserDto userDto, HttpServletRequest request) throws LoginDisabledException {
         User user = userRepository.findById(userDto.getLogin())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid login or password"));
+        if (user.isLoginDisabled()){
+            throw new LoginDisabledException("You have exceeded the allowed number of attempts");
+        }
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userDto.getLogin(), userDto.getPassword()));
         if (tokenService.isTokenExistByUser(user.getLogin())) {
             String existToken = tokenService.getTokenByUserLogin(user.getLogin());
             if (!jwtService.isTokenExpired(existToken)) {
@@ -61,6 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .login(userDto.getLogin())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .enabled(true)
+                .balance(8.0D)
                 .authority(authorityRepository.findByAuthorityNameIgnoreCase("user")
                         .orElseThrow(() -> new NoSuchElementException("Authority not found")))
                 .build();

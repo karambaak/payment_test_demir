@@ -1,6 +1,6 @@
 package com.example.payment.services;
 
-import com.example.payment.errors.NotEnoughBalanceException;
+import com.example.payment.errors.exceptions.NotEnoughBalanceException;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface TransactionsService {

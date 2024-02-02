@@ -1,4 +1,4 @@
-package com.example.payment.errors;
+package com.example.payment.errors.exceptions;
 
 public class InvalidLoginException extends Exception{
     public InvalidLoginException(String message) {

@@ -32,3 +32,10 @@ databaseChangeLog:
                   type: long
                   constraints:
                     nullable: false
+              - column:
+                  name: failed_login_attempts
+                  type: int
+              - column:
+                  name: login_disabled
+                  type: boolean
+                  defaultValueBoolean: false
