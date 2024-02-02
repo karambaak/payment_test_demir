@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +80,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void logout(HttpServletRequest request) {
-        String login = request.getUserPrincipal().getName();
-        tokenService.deleteTokenByUserLogin(login);
+        var principal = Optional.ofNullable(request.getUserPrincipal());
+        if (principal.isPresent()){
+            String login = principal.get().getName();
+            tokenService.deleteTokenByUserLogin(login);
+        } else {
+            throw new UsernameNotFoundException("User not found");
+        }
     }
 }
