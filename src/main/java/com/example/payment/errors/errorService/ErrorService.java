@@ -3,10 +3,7 @@ package com.example.payment.errors.errorService;
 import com.example.payment.errors.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
-import java.util.ArrayList;
 import java.util.List;
 @Service
 @Slf4j

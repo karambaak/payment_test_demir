@@ -85,9 +85,7 @@ class AuthenticationServiceTest {
         when(userRepository.findById(userDto.getLogin())).thenReturn(Optional.of(user));
         when(user.isLoginDisabled()).thenReturn(true);
 
-        assertThrows(LoginDisabledException.class, () -> {
-            authenticationServiceImpl.login(userDto, mock(HttpServletRequest.class));
-        });
+        assertThrows(LoginDisabledException.class, () -> authenticationServiceImpl.login(userDto, mock(HttpServletRequest.class)));
 
         verify(authenticationManager, never()).authenticate(any());
         verify(tokenService, never()).addUserToken(any(), any());

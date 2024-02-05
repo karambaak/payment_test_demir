@@ -9,6 +9,7 @@ import com.example.payment.services.JwtService;
 import com.example.payment.services.TransactionsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TransactionServiceImpl implements TransactionsService {
 
     private final TransactionsRepository transactionsRepository;
@@ -34,7 +36,9 @@ public class TransactionServiceImpl implements TransactionsService {
                     .dateTime(LocalDateTime.now())
                     .amount(amount)
                     .build());
+            log.info("Transaction created from {}", transFrom);
         } else {
+            log.info("Transaction canceled {}", transFrom);
             throw new NotEnoughBalanceException();
         }
     }
